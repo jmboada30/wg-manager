@@ -2,13 +2,32 @@
 """
 wg-manager: gestor de clientes WireGuard desde terminal.
 
-Uso: sudo -E python3 main.py
+Uso: sudo wg-manager   (o: sudo python3 main.py)
 """
 
 import os
 import subprocess
 import sys
 import time
+
+
+def require_root() -> None:
+    """
+    Se comprueba ANTES de importar config: el .env suele estar en 600 dentro
+    de un directorio 700, asi que sin root la carga falla con un
+    'falta la variable X' que manda a buscar un problema que no existe.
+    """
+    if os.geteuid() != 0:
+        print(
+            "\n[ERROR] wg-manager necesita privilegios de root para leer la "
+            "configuracion de WireGuard y hablar con el kernel.\n"
+            "        Ejecuta:  sudo wg-manager\n",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+
+require_root()
 
 try:
     import config
@@ -90,17 +109,6 @@ def select_client(action: str) -> tuple[int, str, str]:
     return -1, "", ""
 
 
-def require_root() -> None:
-    if os.geteuid() != 0:
-        print(
-            "\n[ERROR] wg-manager necesita privilegios de root para leer "
-            f"{config.WG_CONF} y hablar con el kernel.\n"
-            "        Ejecuta:  sudo -E python3 main.py\n",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-
-
 def menu() -> None:
     while True:
         print("\n=== GESTOR VPN WIREGUARD ===")
@@ -176,7 +184,6 @@ def menu() -> None:
 
 
 if __name__ == "__main__":
-    require_root()
     try:
         menu()
     except KeyboardInterrupt:

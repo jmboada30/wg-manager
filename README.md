@@ -25,7 +25,7 @@ cd /opt/wg-manager
 cp .env.example .env
 chmod 600 .env
 $EDITOR .env
-sudo -E python3 main.py
+sudo wg-manager
 ```
 
 El `.env` se busca en este orden:
