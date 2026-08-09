@@ -1,0 +1,32 @@
+# Secretos y datos de clientes (contienen llaves privadas)
+.env
+.env.*
+!.env.example
+clients/
+*.conf
+!*.conf.example
+*.key
+*.pub
+*.psk
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+.venv/
+env/
+*.egg-info/
+build/
+dist/
+
+# Editores y SO
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# Logs
+*.log
